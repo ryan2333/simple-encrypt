@@ -125,3 +125,18 @@ func TestMakeBase64StrWith3Des(t *testing.T) {
 
 	t.Log("base 3des parse: ", string(str))
 }
+
+func TestMakeBase64StrWithXor(t *testing.T) {
+	key := "xx2233"
+	pass := "pip123456"
+
+	hh := MakeBase64StrWithXor([]byte(key), []byte(pass))
+	t.Log("encrypt: ", string(hh))
+
+	d, err := ParseBase64StrWithXor([]byte(key), string(hh))
+	if err != nil {
+		t.Errorf("parse encrypt failed, err: %v", err.Error())
+		return
+	}
+	t.Log("decrypt: ", string(d))
+}

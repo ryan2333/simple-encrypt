@@ -203,8 +203,13 @@ func MakeBase64StrWithXor(key, orig []byte) string {
 	return base64.StdEncoding.EncodeToString(MakeXor(key, orig))
 }
 
-func ParseBase64StrWithXor(key, crypt []byte) string {
-	return base64.StdEncoding.EncodeToString(MakeXor(key, crypt))
+func ParseBase64StrWithXor(key []byte, base64Str string) ([]byte, error) {
+	orig, err := base64.StdEncoding.DecodeString(base64Str)
+	if err != nil {
+		return nil, nil
+	}
+
+	return MakeXor(key, orig), nil
 }
 
 func MakeBase64StrWithAes(key, orig []byte) (base64Str string, err error) {
