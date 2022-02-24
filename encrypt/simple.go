@@ -189,6 +189,24 @@ func MakeMd5SaltEncrypt(orig []byte) (crypt []byte, err error) {
 	return bcrypt.GenerateFromPassword(orig, 0)
 }
 
+func MakeXor(key, orig []byte) []byte {
+	crypt := make([]byte, len(orig))
+
+	for i := range crypt {
+		crypt[i] = orig[i] ^ key[i%len(key)]
+	}
+
+	return crypt
+}
+
+func MakeBase64StrWithXor(key, orig []byte) string {
+	return base64.StdEncoding.EncodeToString(MakeXor(key, orig))
+}
+
+func ParseBase64StrWithXor(key, crypt []byte) string {
+	return base64.StdEncoding.EncodeToString(MakeXor(key, crypt))
+}
+
 func MakeBase64StrWithAes(key, orig []byte) (base64Str string, err error) {
 	crypt, err := MakeAesEncrypt(key, orig)
 	if err != nil {
